@@ -1,7 +1,7 @@
 import 'npm:dotenv/config';
 import TelegramBot from 'npm:node-telegram-bot-api';
 import axios from 'npm:axios';
-import cheerio from 'npm:cheerio';
+import * as cheerio from 'npm:cheerio'; // ✅ التصحيح هنا
 import fs from 'node:fs';
 import FormData from 'npm:form-data';
 import path from 'node:path';
@@ -28,7 +28,6 @@ function isOldMessage(msgOrQuery) {
   const now = Math.floor(Date.now() / 1000);
   return (now - msgOrQuery.date) > 180;
 }
-
 // التعامل مع الرسائل فقط إذا حديثة بدون أي ردود أو إشعارات
 bot.on('message', (msg) => {
   if (isOldMessage(msg)) return;  // تجاهل قديم بصمت
