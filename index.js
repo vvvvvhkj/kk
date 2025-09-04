@@ -1,7 +1,7 @@
 import "npm:dotenv/config";
 import TelegramBot from "npm:node-telegram-bot-api";
 import axios from "npm:axios";
-import cheerio from "npm:cheerio";
+import { load as loadHTML } from "npm:cheerio";   // ✅ تعديل هنا
 import fs from "node:fs";
 import FormData from "npm:form-data";
 import path from "node:path";
@@ -12,6 +12,7 @@ import express from "npm:express";
 const sqlite3 = sqlite3pkg.verbose();
 const app = express();
 const token = process.env.to;
+
 
 const bot = new TelegramBot(token, {
   polling: {
