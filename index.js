@@ -1823,7 +1823,7 @@ bot.on('photo', async (msg) => {
 const pendingIP = {};
 
 // دالة للحصول على رقم عشوائي بين قيمتين
-function getRandomInt(min, max) {
+function shksiwjw(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -1952,8 +1952,8 @@ function simulate_dcg(chatId, messageId) {
                 reply_markup: markup
             });
         } else {
-            dcgs += getRandomInt(100, 500);  // زيادة عشوائية لعدد الهجمات
-            data_sent += getRandomInt(1, 3);   // زيادة عشوائية للبيانات
+            dcgs += shksiwjw(100, 500);  // زيادة عشوائية لعدد الهجمات
+            data_sent += shksiwjw(1, 3);   // زيادة عشوائية للبيانات
             const duration = Math.floor(elapsed / 60);  // المدة بالدقايق
             const markup = {
                 inline_keyboard: [
