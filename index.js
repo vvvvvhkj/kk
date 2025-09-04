@@ -1,18 +1,16 @@
-import "npm:dotenv/config";
-import TelegramBot from "npm:node-telegram-bot-api";
-import axios from "npm:axios";
-import { load as loadHTML } from "npm:cheerio";   // ✅ تعديل هنا
-import fs from "node:fs";
-import FormData from "npm:form-data";
-import path from "node:path";
-import sqlite3pkg from "npm:sqlite3";
-import crypto from "node:crypto";
-import express from "npm:express";
+import 'dotenv/config';
+import TelegramBot from 'node-telegram-bot-api';
+import axios from 'axios';
+import cheerio from 'cheerio';
+import fs from 'fs';
+import FormData from 'form-data';
+import path from 'path';
+import sqlite3 from 'sqlite3';
+import crypto from 'crypto';
+import express from 'express';
 
-const sqlite3 = sqlite3pkg.verbose();
 const app = express();
 const token = process.env.to;
-
 
 const bot = new TelegramBot(token, {
   polling: {
@@ -1824,7 +1822,7 @@ bot.on('photo', async (msg) => {
 const pendingIP = {};
 
 // دالة للحصول على رقم عشوائي بين قيمتين
-function shksiwjw(min, max) {
+function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -1953,8 +1951,8 @@ function simulate_dcg(chatId, messageId) {
                 reply_markup: markup
             });
         } else {
-            dcgs += shksiwjw(100, 500);  // زيادة عشوائية لعدد الهجمات
-            data_sent += shksiwjw(1, 3);   // زيادة عشوائية للبيانات
+            dcgs += getRandomInt(100, 500);  // زيادة عشوائية لعدد الهجمات
+            data_sent += getRandomInt(1, 3);   // زيادة عشوائية للبيانات
             const duration = Math.floor(elapsed / 60);  // المدة بالدقايق
             const markup = {
                 inline_keyboard: [
