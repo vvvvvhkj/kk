@@ -1,29 +1,52 @@
+
 import 'npm:dotenv/config';
 import TelegramBot from 'npm:node-telegram-bot-api';
 import axios from 'npm:axios';
-import * as cheerio from 'npm:cheerio'; // ✅ التصحيح هنا
+import * as cheerio from 'npm:cheerio';
 import fs from 'node:fs';
 import FormData from 'npm:form-data';
 import path from 'node:path';
-import sqlite3 from 'npm:sqlite3';
 import crypto from 'node:crypto';
 import express from 'npm:express';
+import { DB } from 'https://deno.land/x/sqlite/mod.ts'; // ✅ قاعدة بيانات Deno
 
 const app = express();
 const token = Deno.env.get("to");
+const bot = new TelegramBot(token, { polling: true });
 
-const bot = new TelegramBot(token, {
-  polling: {
-    interval: 100,
-    autoStart: true,
-    params: {
-      timeout: 10,
-      limit: 100
-    }
-  }
+// إنشاء أو فتح قاعدة البيانات
+const db = new DB("data.db");
+
+// إنشاء جدول (إذا لم يكن موجوداً)
+db.execute(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+  )
+`);
+
+// دالة لإضافة مستخدم وإرسال رسالة Telegram
+function addUserAndNotify(name) {
+  db.query("INSERT INTO users (name) VALUES (?)", [name]);
+
+  // إرسال رسالة للمشرف على التلغرام
+  const message = `تم إضافة مستخدم جديد إلى قاعدة البيانات:\n🧑 الاسم: ${name}`;
+  const adminChatId = Deno.env.get("admin_id"); // تأكد من وضع هذا في .env
+
+  bot.sendMessage(adminChatId, message);
+}
+
+// مثال على الاستخدام: إضافة مستخدم عند تلقي أمر /add في التلغرام
+bot.onText(/\/add (.+)/, (msg, match) => {
+  if (!match) return;
+
+  const name = match[1];
+  addUserAndNotify(name);
+
+  bot.sendMessage(msg.chat.id, `✅ تم حفظ الاسم "${name}" في قاعدة البيانات.`);
 });
 
-// دالة للتحقق من قدم الرسالة أو الزر (أكثر من 3 دقائق)
+// التحقق من قِدم الرسائل
 function isOldMessage(msgOrQuery) {
   const now = Math.floor(Date.now() / 1000);
   return (now - msgOrQuery.date) > 180;
